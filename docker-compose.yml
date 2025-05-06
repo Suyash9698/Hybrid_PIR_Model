@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    volumes:
+      - ./data:/data
+    ports:
+      - "8000-8005:8000-8005"
+    environment:
+      - PIR_BASEPORT=8000
+      - PIR_DATADIR=/data
+      - PIR_DBPATH=/data/meta.db
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    depends_on:
+      - server
+    command: ["./client", "-file=3"]
